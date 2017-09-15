@@ -39,7 +39,14 @@ public class Chat : MonoBehaviour
             chatInput.text = null;
 
             ActivateChatInput();
+
+            Invoke("SetChatPos", 0.15f);
         }
+    }
+
+    void SetChatPos()
+    {
+        vertivalScroll.value = 0;
     }
 
     public void ReciveChatMessage(SocketIOEvent e)
@@ -50,6 +57,9 @@ public class Chat : MonoBehaviour
 
     public void OnReciveChatMessage(string sender, string msg)
     {
-        chatText.text += sender + ": " + msg + "\n";
+        string dataTimeNow = System.DateTime.Now.ToString();
+        string time = dataTimeNow.Split(new char[] { ' ' }, 3)[1];
+
+        chatText.text += time + " " + sender + ": " + msg + "\n";
     }
 }
