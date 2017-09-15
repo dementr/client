@@ -8,19 +8,6 @@ public class ProfileMenu : MonoBehaviour
 
     public GameObject chatPanel, activateChatbutton;
 
-    void Start()
-    {
-        socket = NetworkMain.inst.socket;
-
-        Init();
-    }
-
-    void Init()
-    {
-        socket.On("joinr", JoinRoom);
-        socket.On("joiGame", JoinGame);
-    }
-
     public void JoinChat()
     {
         string nickJson = "{ \"nick\": \"" + NetworkMain.inst.nickname + "\" }";
@@ -50,6 +37,14 @@ public class ProfileMenu : MonoBehaviour
     public void SetNickname(string nickname)
     {
         NetworkMain.inst.nickname = nickname;
+    }
+
+    void OnEnable()
+    {
+        socket = NetworkMain.inst.socket;
+
+        socket.On("joinr", JoinRoom);
+        socket.On("joiGame", JoinGame);
     }
 
     void OnDisable()

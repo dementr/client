@@ -1,7 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 using UnityEngine;
 using SocketIO;
-using UnityEngine.UI;
 
 public class LoginMenu : MonoBehaviour
 {
@@ -9,44 +8,61 @@ public class LoginMenu : MonoBehaviour
 
     SocketIOComponent socket;
 
-    public Toggle isLocalToggle;
-
-    private void Start()
+    void Awake()
     {
         network = NetworkMain.inst;
         socket = network.socket;
-
-        socket.isLocal = isLocalToggle.isOn;
     }
+
+    #region Set login info
+
+    public void SetLogin(string _login)
+    {
+        network.login = _login;
+    }
+
+    public void SetPassword(string _password)
+    {
+        network.password = _password;
+    }
+
+    #endregion
 
     public void Login()
     {
-        socket.Init();
         //network.Init();
-        if (!socket.socket.IsConnected)
-            return;
-
-        socket.On("authOk", LoadProfileScene);
-        socket.On("errors", LoginError);
 
         string logInfo = JsonUtility.ToJson(new LoginInfo(network.login, network.password));
 
         socket.Emit("auth", new JSONObject(logInfo));
     }
 
-    public void LoginError(SocketIOEvent e)
-    {
-        Debug.Log("LoginError");
-    }
-
-    public void LoadProfileScene(SocketIOEvent e)
+    public void OnAuthSuccessful(SocketIOEvent e)
     {
         SceneManager.LoadScene("Profile");
     }
 
+    public void OnFirstConnection(SocketIOEvent e)
+    {
+        Debug.Log("First connection");
+    }
+
+    public void OnAuthError(SocketIOEvent e)
+    {
+        Debug.Log("AuthError");
+    }
+
+    void OnEnable()
+    {
+        socket.On("authOk", OnAuthSuccessful);
+        socket.On("firstCon", OnFirstConnection);
+        socket.On("authError", OnAuthError);
+    }
+
     void OnDisable()
     {
-        socket.Off("authOk", LoadProfileScene);
-        socket.Off("errors", LoginError);
+        socket.Off("authOk", OnAuthSuccessful);
+        socket.Off("firstCon", OnFirstConnection);
+        socket.Off("authError", OnAuthError);
     }
 }

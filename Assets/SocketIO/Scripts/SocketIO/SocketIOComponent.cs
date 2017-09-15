@@ -35,6 +35,7 @@ using System.Threading;
 using UnityEngine;
 using WebSocketSharp;
 using WebSocketSharp.Net;
+using UnityEngine.SceneManagement;
 
 namespace SocketIO
 {
@@ -56,7 +57,6 @@ namespace SocketIO
 
         public string sid { get; set; }
         public bool IsConnected { get { return connected; } }
-        public WebSocket socket { get { return ws; } }
         #endregion
 
         #region Private Properties
@@ -111,6 +111,11 @@ namespace SocketIO
             wsConnected = false;
 
             ws.Connect();
+
+            if (!ws.IsConnected)
+                return;
+
+            SceneManager.LoadScene("Login");
         }
 
         void Awake()

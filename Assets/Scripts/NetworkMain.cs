@@ -27,15 +27,16 @@
 #endregion
 
 using UnityEngine;
+using UnityEngine.UI;
 using SocketIO;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
 
 public class NetworkMain : MonoBehaviour
 {
     public static NetworkMain inst;
 
     public SocketIOComponent socket;
+
+    public Toggle isLocalToggle;
 
     public string login;
     public string password;
@@ -44,6 +45,8 @@ public class NetworkMain : MonoBehaviour
     void Awake()
     {
         inst = this;
+
+        socket.isLocal = isLocalToggle.isOn;
     }
 
     public void Init()
@@ -51,16 +54,6 @@ public class NetworkMain : MonoBehaviour
         socket.On("open", TestOpen);
         socket.On("error", TestError);
         socket.On("close", TestClose);
-    }
-
-    public void SetLogin(string _login)
-    {
-        NetworkMain.inst.login = _login;
-    }
-
-    public void SetPassword(string _password)
-    {
-        NetworkMain.inst.password = _password;
     }
 
     #region Callbacks
@@ -100,6 +93,14 @@ public class LoginInfo
     }
 }
 
+[System.Serializable]
+public struct RegistrationInfo
+{
+    public string email;
+    public string password;
+    public string confirmPassword;
+}
+
 public class SendedChatMsg
 {
     public string msg;
@@ -135,17 +136,6 @@ public class PlayerPositionInfo
     public static PlayerPositionInfo FromJson(string jSon)
     {
         return JsonUtility.FromJson<PlayerPositionInfo>(jSon);
-    }
-}
-
-public class Test
-{
-    public string hello;
-    public int is1;
-
-    public static Test FromJson(string jsonStr)
-    {
-        return JsonUtility.FromJson<Test>(jsonStr);
     }
 }
 #endregion
