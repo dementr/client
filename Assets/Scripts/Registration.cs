@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using SocketIO;
 
 public class Registration : MonoBehaviour
@@ -9,6 +6,11 @@ public class Registration : MonoBehaviour
     SocketIOComponent socket;
 
     public RegistrationInfo registrationInfo;
+
+    void Awake()
+    {
+        socket = NetworkMain.inst.socket;
+    }
 
     #region SetRegistrationInfo
 
@@ -31,7 +33,21 @@ public class Registration : MonoBehaviour
 
     public void SendRegistrationInfo()
     {
-        string json = JsonUtility.ToJson(registrationInfo);
+        if (!registrationInfo.CheckPasswordCorrectness())
+        {
+            MessageWindow.inst.ShowError("Password length must be more than 6 characters \nPassword must contain at least 1 digit", TMPro.TextAlignmentOptions.MidlineLeft);
+
+            return;
+        }
+
+        if (!registrationInfo.CheckPassordIdentity())
+        {
+            MessageWindow.inst.ShowError("Passwords do not match");
+
+            return;
+        }
+
+        string json = JsonUtility.ToJson(new RegistrationInfoBase(registrationInfo));
         socket.Emit("reg", new JSONObject(json));
     }
 
@@ -42,28 +58,25 @@ public class Registration : MonoBehaviour
 
     void OnRegistrationError(SocketIOEvent e)
     {
-        MessageWindow.inst.Show("Registration error", Color.red);
+        MessageWindow.inst.ShowError("Registration error");
     }
 
-    bool CheckPassord()
+    void OnEmaiError(SocketIOEvent e)
     {
-        if (registrationInfo.password == registrationInfo.confirmPassword)
-            return true;
-
-        return false;
+        MessageWindow.inst.ShowError("This email occupied");
     }
 
     void OnEnable()
     {
-        socket = NetworkMain.inst.socket;
-
         socket.On("regOk", OnRegistrationSuccessful);
         socket.On("regError", OnRegistrationError);
+        socket.On("emailError",OnEmaiError);
     }
 
     void OnDisable()
     {
         socket.Off("regOk", OnRegistrationSuccessful);
         socket.Off("regError", OnRegistrationError);
+        socket.Off("emailError", OnEmaiError);
     }
 }

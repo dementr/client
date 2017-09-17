@@ -8,6 +8,8 @@ public class LoginMenu : MonoBehaviour
 
     SocketIOComponent socket;
 
+    public GameObject sendNicknamePanel;
+
     void Awake()
     {
         network = NetworkMain.inst;
@@ -37,6 +39,12 @@ public class LoginMenu : MonoBehaviour
         socket.Emit("auth", new JSONObject(logInfo));
     }
 
+    public void SendNickname()
+    {
+        string nickJson = "{ \"nick\": \"" + network.nickname + "\" }";
+        socket.Emit("nick", new JSONObject(nickJson));
+    }
+
     public void OnAuthSuccessful(SocketIOEvent e)
     {
         SceneManager.LoadScene("Profile");
@@ -44,18 +52,24 @@ public class LoginMenu : MonoBehaviour
 
     public void OnFirstConnection(SocketIOEvent e)
     {
-        Debug.Log("First connection");
+        sendNicknamePanel.SetActive(true);
     }
 
     public void OnAuthError(SocketIOEvent e)
     {
-        Debug.Log("AuthError");
+        MessageWindow.inst.ShowError("Password or login incorrect");
+    }
+
+    public void OnNickError(SocketIOEvent e)
+    {
+        MessageWindow.inst.ShowError("Nick error");
     }
 
     void OnEnable()
     {
         socket.On("authOk", OnAuthSuccessful);
         socket.On("firstCon", OnFirstConnection);
+        socket.On("nickError", OnNickError);
         socket.On("authError", OnAuthError);
     }
 
@@ -63,6 +77,7 @@ public class LoginMenu : MonoBehaviour
     {
         socket.Off("authOk", OnAuthSuccessful);
         socket.Off("firstCon", OnFirstConnection);
+        socket.Off("nickError", OnNickError);
         socket.Off("authError", OnAuthError);
     }
 }

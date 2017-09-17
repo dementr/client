@@ -11,22 +11,11 @@ public class Chat : MonoBehaviour
 
     public Scrollbar vertivalScroll;
 
-    void Start()
+    void Awake()
     {
         socket = NetworkMain.inst.socket;
 
         ActivateChatInput();
-        Init();
-    }
-
-    void Init()
-    {
-        socket.On("smsgChat", ReciveChatMessage);
-    }
-
-    void ActivateChatInput()
-    {
-        chatInput.ActivateInputField();
     }
 
     public void SendChatMessage()
@@ -44,11 +33,6 @@ public class Chat : MonoBehaviour
         }
     }
 
-    void SetChatPos()
-    {
-        vertivalScroll.value = 0;
-    }
-
     public void ReciveChatMessage(SocketIOEvent e)
     {
         RecivedChatMsg msg = RecivedChatMsg.FromJson(e.data.ToString());
@@ -61,5 +45,25 @@ public class Chat : MonoBehaviour
         string time = dataTimeNow.Split(new char[] { ' ' }, 3)[1];
 
         chatText.text += time + " " + sender + ": " + msg + "\n";
+    }
+
+    void ActivateChatInput()
+    {
+        chatInput.ActivateInputField();
+    }
+
+    void SetChatPos()
+    {
+        vertivalScroll.value = 0;
+    }
+
+    void OnEnable()
+    {
+        socket.On("smsgChat", ReciveChatMessage);
+    }
+
+    void OnDisable()
+    {
+        socket.Off("smsgChat", ReciveChatMessage);
     }
 }
