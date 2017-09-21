@@ -13,8 +13,6 @@ public class Chat : MonoBehaviour
 
     void Awake()
     {
-        socket = NetworkMain.inst.socket;
-
         ActivateChatInput();
     }
 
@@ -59,11 +57,12 @@ public class Chat : MonoBehaviour
 
     void OnEnable()
     {
-        socket.On("smsgChat", ReciveChatMessage);
+        socket = NetworkMain.inst.socket;
+        socket.On("msgChat", ReciveChatMessage);
     }
 
     void OnDisable()
     {
-        socket.Off("smsgChat", ReciveChatMessage);
+        socket.Off("msgChat", ReciveChatMessage);
     }
 }

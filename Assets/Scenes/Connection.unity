@@ -480,6 +480,26 @@ Prefab:
       propertyPath: m_UiScaleMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114682342252180290, guid: 841af9ab5a60d894d9f6342b18fa94e0,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114782202773591496, guid: 841af9ab5a60d894d9f6342b18fa94e0,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114266496998262962, guid: 841af9ab5a60d894d9f6342b18fa94e0,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114872053102984266, guid: 841af9ab5a60d894d9f6342b18fa94e0,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 841af9ab5a60d894d9f6342b18fa94e0, type: 2}
   m_IsPrefabParent: 0

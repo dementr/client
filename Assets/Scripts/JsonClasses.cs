@@ -60,6 +60,27 @@ public class RegistrationInfo : RegistrationInfoBase
     }
 }
 
+public class AuthInfo
+{
+    public string key;
+    public string nick;
+
+    public static AuthInfo FromJson(string json)
+    {
+        return JsonUtility.FromJson<AuthInfo>(json);
+    }
+}
+
+public class SetNickInfo
+{
+    public string result;
+
+    public static SetNickInfo FromJson(string json)
+    {
+        return JsonUtility.FromJson<SetNickInfo>(json);
+    }
+}
+
 public class SendedChatMsg
 {
     public string msg;

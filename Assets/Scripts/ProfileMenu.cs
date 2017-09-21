@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
+using TMPro;
 using SocketIO;
 
 public class ProfileMenu : MonoBehaviour
 {
     //SocketIOComponent socket;
-
-    void Awake()
-    {
-        //socket = NetworkMain.inst.socket;
-    }
+    public TMP_InputField nickInput;
 
     public void SetNickname(string nickname)
     {
@@ -17,7 +14,8 @@ public class ProfileMenu : MonoBehaviour
 
     void OnEnable()
     {
-
+        nickInput.text = NetworkMain.inst.nickname;
+        //socket = NetworkMain.inst.socket;
     }
 
     void OnDisable()

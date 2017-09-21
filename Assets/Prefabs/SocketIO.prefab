@@ -86,6 +86,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   socket: {fileID: 114459496316669476}
   isLocalToggle: {fileID: 0}
-  login: world2
-  password: 12345
+  login: test@gmail.com
+  password: 123456
   nickname: Unnamed

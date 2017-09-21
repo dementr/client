@@ -22,7 +22,6 @@ GameObject:
   - component: {fileID: 114731584747822058}
   - component: {fileID: 222391177811885812}
   - component: {fileID: 114855746707716980}
-  - component: {fileID: 114513743817985804}
   m_Layer: 5
   m_Name: Chat
   m_TagString: Untagged
@@ -75,7 +74,7 @@ GameObject:
   - component: {fileID: 114200186789632816}
   - component: {fileID: 114138720643468738}
   m_Layer: 5
-  m_Name: TextMeshPro - InputField
+  m_Name: NickInput
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -176,8 +175,9 @@ GameObject:
   - component: {fileID: 223768555447762702}
   - component: {fileID: 114139752974457320}
   - component: {fileID: 114090359348304960}
-  - component: {fileID: 114464018636481394}
+  - component: {fileID: 114819351701547482}
   - component: {fileID: 114364666243931086}
+  - component: {fileID: 114464018636481394}
   m_Layer: 5
   m_Name: ProfileCanvas
   m_TagString: Untagged
@@ -480,7 +480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1937040626941436
 GameObject:
   m_ObjectHideFlags: 1
@@ -545,7 +545,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "Unnamed\u200B"
+  m_text: "Profile\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dad33c3358c738348a9dee27fbde5156, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: dad33c3358c738348a9dee27fbde5156, type: 2}
@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: Unnamed
+  m_Text: Profile
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -1638,7 +1638,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114421942354402082}
   m_HandleRect: {fileID: 224676481319939760}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1757,6 +1757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0837a6aa3124bdd408f200dd54e66605, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  nickInput: {fileID: 114138720643468738}
 --- !u!114 &114492698373973644
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1847,20 +1848,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114513743817985804
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1021974015619104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89308f093a0984749a5fb896e648a818, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chatInput: {fileID: 114976109241723980}
-  chatText: {fileID: 114853601215470688}
-  vertivalScroll: {fileID: 114323065245976582}
 --- !u!114 &114563479164160490
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2140,6 +2127,20 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114819351701547482
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1355632504643410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89308f093a0984749a5fb896e648a818, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chatInput: {fileID: 114976109241723980}
+  chatText: {fileID: 114853601215470688}
+  vertivalScroll: {fileID: 114323065245976582}
 --- !u!114 &114853601215470688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2350,7 +2351,7 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114513743817985804}
+      - m_Target: {fileID: 114819351701547482}
         m_MethodName: SendChatMessage
         m_Mode: 1
         m_Arguments:
@@ -2792,8 +2793,8 @@ RectTransform:
   m_Children:
   - {fileID: 224764793721824970}
   - {fileID: 224627717076386278}
-  - {fileID: 224993978488022118}
   - {fileID: 224573677028061482}
+  - {fileID: 224993978488022118}
   - {fileID: 224343740332559522}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2874,7 +2875,7 @@ RectTransform:
   - {fileID: 224413071064663992}
   - {fileID: 224320336664107186}
   m_Father: {fileID: 224365650409579440}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3083,7 +3084,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 15.005865}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224916096140646238
@@ -3173,7 +3174,7 @@ RectTransform:
   - {fileID: 224978633891000146}
   - {fileID: 224025751785545642}
   m_Father: {fileID: 224365650409579440}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}

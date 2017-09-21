@@ -14,11 +14,6 @@ public class GameSearching : MonoBehaviour
     Coroutine timerRoutine;
     WaitForSeconds delay = new WaitForSeconds(1);
 
-    void Awake()
-    {
-        socket = NetworkMain.inst.socket;
-    }
-
     #region Search game
 
     public void StartSearh()
@@ -85,6 +80,8 @@ public class GameSearching : MonoBehaviour
 
     void OnEnable()
     {
+        socket = NetworkMain.inst.socket;
+
         socket.On("gameFound", OnGameFound);
         socket.On("gameReay", OnGameReady);
         socket.On("cancelGame", OnAnotherPlayerCancelGame);

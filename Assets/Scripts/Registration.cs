@@ -51,6 +51,8 @@ public class Registration : MonoBehaviour
         socket.Emit("reg", new JSONObject(json));
     }
 
+    #region Callbacks
+
     void OnRegistrationSuccessful(SocketIOEvent e)
     {
         MessageWindow.inst.Show("Registration is successful", Color.green);
@@ -66,11 +68,13 @@ public class Registration : MonoBehaviour
         MessageWindow.inst.ShowError("This email occupied");
     }
 
+    #endregion
+
     void OnEnable()
     {
         socket.On("regOk", OnRegistrationSuccessful);
         socket.On("regError", OnRegistrationError);
-        socket.On("emailError",OnEmaiError);
+        socket.On("emailError", OnEmaiError);
     }
 
     void OnDisable()

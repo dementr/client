@@ -28,6 +28,11 @@ public class LoginMenu : MonoBehaviour
         network.password = _password;
     }
 
+    public void SetNickname(string nickname)
+    {
+        NetworkMain.inst.nickname = nickname;
+    }
+
     #endregion
 
     public void Login()
@@ -42,42 +47,62 @@ public class LoginMenu : MonoBehaviour
     public void SendNickname()
     {
         string nickJson = "{ \"nick\": \"" + network.nickname + "\" }";
-        socket.Emit("nick", new JSONObject(nickJson));
+        socket.Emit("setNick", new JSONObject(nickJson));
     }
 
-    public void OnAuthSuccessful(SocketIOEvent e)
+    #region Callbacks
+
+    void OnAuthSuccessful(SocketIOEvent e)
     {
-        SceneManager.LoadScene("Profile");
+        AuthInfo info = AuthInfo.FromJson(e.data.ToString());
+
+        if (info.nick == "null")
+        {
+            ShowSetNickWindow();
+        }
+        else
+        {
+            NetworkMain.inst.nickname = info.nick;
+            SceneManager.LoadScene("Profile");
+        }
     }
 
-    public void OnFirstConnection(SocketIOEvent e)
-    {
-        sendNicknamePanel.SetActive(true);
-    }
-
-    public void OnAuthError(SocketIOEvent e)
+    void OnAuthError(SocketIOEvent e)
     {
         MessageWindow.inst.ShowError("Password or login incorrect");
     }
 
-    public void OnNickError(SocketIOEvent e)
+    void OnNickSet(SocketIOEvent e)
     {
-        MessageWindow.inst.ShowError("Nick error");
+        SetNickInfo info = SetNickInfo.FromJson(e.data.ToString());
+
+        switch (info.result)
+        {
+            case "ready": SceneManager.LoadScene("Profile"); break;
+            case "busy": MessageWindow.inst.ShowError("This nickname is occupied"); break;
+            case "error": MessageWindow.inst.ShowError("Error"); break;
+        }
+    }
+
+    #endregion
+
+    void ShowSetNickWindow()
+    {
+        sendNicknamePanel.SetActive(true);
+        sendNicknamePanel.transform.parent.gameObject.SetActive(true);
     }
 
     void OnEnable()
     {
         socket.On("authOk", OnAuthSuccessful);
-        socket.On("firstCon", OnFirstConnection);
-        socket.On("nickError", OnNickError);
+        socket.On("setNick", OnNickSet);
         socket.On("authError", OnAuthError);
     }
 
     void OnDisable()
     {
         socket.Off("authOk", OnAuthSuccessful);
-        socket.Off("firstCon", OnFirstConnection);
-        socket.Off("nickError", OnNickError);
+        socket.Off("setNick", OnNickSet);
         socket.Off("authError", OnAuthError);
     }
 }
