@@ -42,6 +42,10 @@ public class NetworkMain : MonoBehaviour
     public string password;
     public string nickname;
 
+    public string onlineCount;
+
+    public event System.Action<string> OnOnlineChanged = delegate { };
+
     void Awake()
     {
         inst = this;
@@ -51,9 +55,11 @@ public class NetworkMain : MonoBehaviour
 
     public void Init()
     {
-        socket.On("open", TestOpen);
-        socket.On("error", TestError);
-        socket.On("close", TestClose);
+        //socket.On("open", TestOpen);
+        //socket.On("error", TestError);
+        //socket.On("close", TestClose);
+
+        socket.On("countCon", (e) => { onlineCount = OnlineCount.FromJson(e.data.ToString()).count; OnOnlineChanged(onlineCount); });
     }
 
     #region Callbacks

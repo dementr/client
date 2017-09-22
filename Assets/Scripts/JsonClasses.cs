@@ -102,6 +102,31 @@ public class RecivedChatMsg
     }
 }
 
+public class GameSearchingInfo
+{
+    public string status;
+
+    public GameSearchingInfo(string _status)
+    {
+        status = _status;
+    }
+
+    public static GameSearchingInfo FromJson(string json)
+    {
+        return JsonUtility.FromJson<GameSearchingInfo>(json);
+    }
+}
+
+public class OnlineCount
+{
+    public string count;
+
+    public static OnlineCount FromJson(string json)
+    {
+        return JsonUtility.FromJson<OnlineCount>(json);
+    }
+}
+
 public class PlayerPositionInfo
 {
     public string nick;

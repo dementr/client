@@ -13,12 +13,14 @@ public class Player : MonoBehaviour
         StartCoroutine(SendPosition());
     }
 
-    void Update()
+    void FixedUpdate()
     {
         float x = Input.GetAxisRaw("Horizontal");
         float z = Input.GetAxisRaw("Vertical");
 
         info.pos += new Vector3(x, 0, z) * speed * Time.deltaTime;
+
+
     }
 
     public void RecivePlayerInfo(PlayerPositionInfo _info)

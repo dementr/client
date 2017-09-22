@@ -9,23 +9,41 @@ public class GameSearching : MonoBehaviour
 
     public TMPro.TMP_Text timerText;
 
-    public GameObject gameFoundWindow;
+    public GameObject startBtn, stopBtn, gameFoundWindow, buttons, acceptedText;
 
     Coroutine timerRoutine;
     WaitForSeconds delay = new WaitForSeconds(1);
 
-    #region Search game
+    #region Game searching
 
     public void StartSearh()
     {
-        socket.Emit("searchGame");
-        StartTimer();
+        string json = JsonUtility.ToJson(new GameSearchingInfo("start"));
+        socket.Emit("searchGame", new JSONObject(json));
     }
 
     public void StopSearch()
     {
-        socket.Emit("stopSearch");
-        StopTimer();
+        string json = JsonUtility.ToJson(new GameSearchingInfo("stop"));
+        socket.Emit("searchGame", new JSONObject(json));
+    }
+
+    public void AcceptGame()
+    {
+        OnGameAccepted();
+
+        GameSearchingInfo info = new GameSearchingInfo("accepted");
+
+        string json = JsonUtility.ToJson(info);
+        socket.Emit("searchGame", new JSONObject(json));
+    }
+
+    public void CancelGame()
+    {
+        GameSearchingInfo info = new GameSearchingInfo("cancel");
+
+        string json = JsonUtility.ToJson(info);
+        socket.Emit("searchGame", new JSONObject(json));
     }
 
     IEnumerator TimerCoroutine()
@@ -42,6 +60,7 @@ public class GameSearching : MonoBehaviour
 
     void StartTimer()
     {
+        StopTimer();
         timerRoutine = StartCoroutine(TimerCoroutine());
     }
 
@@ -52,45 +71,54 @@ public class GameSearching : MonoBehaviour
 
     #endregion
 
-    public void AcceptGame()
-    {
-        socket.Emit("acceptGame");
-    }
-
-    public void CancelGame()
-    {
-        socket.Emit("cancelGame");
-    }
-
-    void OnGameFound(SocketIOEvent e)
+    void OnGameFound()
     {
         gameFoundWindow.SetActive(true);
+        StartTimer();
     }
 
-    void OnGameReady(SocketIOEvent e)
+    void OnGameAccepted()
     {
-        SceneManager.LoadScene("Game");
+        acceptedText.SetActive(true);
+        buttons.SetActive(false);
     }
 
-    void OnAnotherPlayerCancelGame(SocketIOEvent e)
+    void OnGameCanceled()
     {
-        MessageWindow.inst.ShowError("Another player cancel the game");
+        startBtn.SetActive(true);
+        stopBtn.SetActive(false);
         gameFoundWindow.SetActive(false);
+        acceptedText.SetActive(false);
+        buttons.SetActive(true);
+
+        MessageWindow.inst.ShowError("Game canceled");
+    }
+
+    void OnSearchGame(SocketIOEvent e)
+    {
+        GameSearchingInfo info = GameSearchingInfo.FromJson(e.data.ToString());
+
+        switch (info.status)
+        {
+            case "added": StartTimer(); break;
+            case "removed": StopTimer(); break;
+            case "found": OnGameFound(); break;
+            case "canceled": OnGameCanceled(); break;
+
+            case "failure": MessageWindow.inst.ShowError("Error"); break;
+            case "css": SceneManager.LoadScene("Game"); break;
+        }
     }
 
     void OnEnable()
     {
         socket = NetworkMain.inst.socket;
 
-        socket.On("gameFound", OnGameFound);
-        socket.On("gameReay", OnGameReady);
-        socket.On("cancelGame", OnAnotherPlayerCancelGame);
+        socket.On("searchGame", OnSearchGame);
     }
 
     void OnDisable()
     {
-        socket.Off("gameReady", OnGameFound);
-        socket.Off("gameReay", OnGameReady);
-        socket.Off("cancelGame", OnAnotherPlayerCancelGame);
+        socket.Off("searchGame", OnSearchGame);
     }
 }

@@ -37,7 +37,7 @@ public class LoginMenu : MonoBehaviour
 
     public void Login()
     {
-        //network.Init();
+        network.Init();
 
         string logInfo = JsonUtility.ToJson(new LoginInfo(network.login, network.password));
 

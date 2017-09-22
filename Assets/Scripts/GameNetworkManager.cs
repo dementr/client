@@ -19,17 +19,6 @@ public class GameNetworkManager : MonoBehaviour
         inst = this;
     }
 
-    void Start()
-    {
-        socket = NetworkMain.inst.socket;
-        Init();
-    }
-
-    void Init()
-    {
-        socket.On("gamecoor", RecivePlayerPosition);
-    }
-
     void RecivePlayerPosition(SocketIOEvent e)
     {
         PlayerPositionInfo playerInfo = PlayerPositionInfo.FromJson(e.data.ToString());
@@ -59,6 +48,13 @@ public class GameNetworkManager : MonoBehaviour
     {
         string jsonStr = JsonUtility.ToJson(pos);
         socket.Emit("game", new JSONObject(jsonStr));
+    }
+
+    void OnEnable()
+    {
+        socket = NetworkMain.inst.socket;
+
+        socket.On("gamecoor", RecivePlayerPosition);
     }
 
     void OnDisable()
